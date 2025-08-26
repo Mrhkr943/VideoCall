@@ -279,7 +279,7 @@
                 // Send verification email
                 await user.sendEmailVerification();
                 showMessage('Account created! Check your email for verification.', 'success');
-                setTimeout(() => window.location.href = 'home.html', 3000);
+                setTimeout(() => window.location.href = 'https://africanfuture.github.io/SAFE/home.html', 3000);
                 
             } catch (error) {
                 showMessage(error.message, 'error');
