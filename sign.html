@@ -330,7 +330,7 @@
 
         // Check auth state
         auth.onAuthStateChanged((user) => {
-            if (user || user.emailVerified) {
+            if (user && user.emailVerified) {
                 window.location.href = 'https://africanfuture.github.io/SAFE/home.html';
             }
         });
