@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBE Withdrawal Control Panel - SAFE</title>
+    <title>CBE Withdrawal Control Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #007bff;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
+            --primary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
             --info: #17a2b8;
-            --dark: #343a40;
+            --dark: #2c3e50;
             --light: #f8f9fa;
         }
         
@@ -24,12 +24,12 @@
         
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f5f7f9;
             color: #333;
             line-height: 1.6;
         }
         
-        .admin-container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
@@ -42,6 +42,7 @@
             border-radius: 10px;
             margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         
         .header-content {
@@ -81,60 +82,40 @@
         
         .stat-card {
             background: white;
-            border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
             text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .stat-card.pending {
-            border-top: 4px solid var(--warning);
-        }
-        
-        .stat-card.approved {
-            border-top: 4px solid var(--success);
-        }
-        
-        .stat-card.rejected {
-            border-top: 4px solid var(--danger);
-        }
-        
-        .stat-card.total {
-            border-top: 4px solid var(--primary);
-        }
-        
-        .stat-number {
+        .stat-value {
             font-size: 32px;
             font-weight: bold;
             margin: 10px 0;
         }
         
-        .stat-title {
-            font-size: 16px;
-            color: #6c757d;
+        .stat-pending {
+            color: var(--warning);
         }
         
-        .withdrawal-controls {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+        .stat-approved {
+            color: var(--success);
         }
         
-        .section-title {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: var(--dark);
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
+        .stat-rejected {
+            color: var(--danger);
         }
         
         .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            margin-bottom: 20px;
+            align-items: center;
         }
         
         .filter-group {
@@ -148,7 +129,7 @@
             font-weight: bold;
         }
         
-        .filter-group select, .filter-group input {
+        .filter-group input, .filter-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -156,59 +137,57 @@
             font-size: 16px;
         }
         
-        .search-box {
-            position: relative;
+        .withdrawal-list {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
+        .withdrawal-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+            padding: 15px 20px;
+            background: var(--dark);
+            color: white;
+            font-weight: bold;
         }
         
-        .search-box input {
-            padding-left: 35px;
-        }
-        
-        .withdrawals-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .withdrawals-table th, .withdrawals-table td {
-            padding: 15px;
-            text-align: left;
+        .withdrawal-item {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+            padding: 15px 20px;
             border-bottom: 1px solid #eee;
+            align-items: center;
         }
         
-        .withdrawals-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
+        .withdrawal-item:hover {
+            background-color: #f9f9f9;
         }
         
-        .withdrawals-table tr:hover {
-            background-color: #f8f9fa;
+        .withdrawal-item:last-child {
+            border-bottom: none;
         }
         
         .user-info {
             display: flex;
-            align-items: center;
+            flex-direction: column;
         }
         
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
+        .user-email {
             font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .user-id {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .amount {
+            font-weight: bold;
+            color: var(--dark);
         }
         
         .status-badge {
@@ -216,6 +195,7 @@
             border-radius: 20px;
             font-size: 14px;
             font-weight: 500;
+            text-align: center;
         }
         
         .status-pending {
@@ -246,146 +226,32 @@
             font-size: 14px;
             font-weight: 500;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
         
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
-        
-        .btn-approve {
+        .btn-success {
             background-color: var(--success);
             color: white;
         }
         
-        .btn-approve:hover {
+        .btn-success:hover {
             background-color: #218838;
         }
         
-        .btn-reject {
+        .btn-danger {
             background-color: var(--danger);
             color: white;
         }
         
-        .btn-reject:hover {
+        .btn-danger:hover {
             background-color: #c82333;
         }
         
-        .btn-view {
-            background-color: var(--info);
-            color: white;
-        }
-        
-        .btn-view:hover {
-            background-color: #138496;
-        }
-        
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-        
-        .modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-        
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header h2 {
-            font-size: 22px;
-            color: var(--dark);
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #6c757d;
-        }
-        
-        .modal-body {
-            padding: 20px;
-        }
-        
-        .withdrawal-details {
-            margin-bottom: 20px;
-        }
-        
-        .detail-row {
-            display: flex;
-            margin-bottom: 15px;
-        }
-        
-        .detail-label {
-            flex: 0 0 150px;
-            font-weight: bold;
-            color: #6c757d;
-        }
-        
-        .detail-value {
-            flex: 1;
-        }
-        
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid #eee;
-            text-align: right;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-            gap: 10px;
-        }
-        
-        .pagination-btn {
-            padding: 8px 15px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .pagination-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .pagination-btn:hover:not(.active) {
-            background: #f8f9fa;
+        .btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
         }
         
         .alert {
@@ -409,43 +275,133 @@
         
         .loading {
             text-align: center;
-            padding: 20px;
+            padding: 40px;
             color: #6c757d;
         }
         
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .modal-title {
+            margin-bottom: 20px;
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .modal-details {
+            margin-bottom: 20px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #6c757d;
+        }
+        
+        .rejection-reason {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .info-note {
+            background-color: #e8f4f8;
+            border-left: 4px solid var(--info);
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .admin-info {
-                text-align: center;
-                margin-top: 15px;
+            .withdrawal-header, .withdrawal-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
             
             .filters {
                 flex-direction: column;
             }
             
-            .withdrawals-table {
-                display: block;
-                overflow-x: auto;
+            .filter-group {
+                width: 100%;
             }
             
-            .detail-row {
-                flex-direction: column;
-                margin-bottom: 20px;
-            }
-            
-            .detail-label {
-                margin-bottom: 5px;
+            .action-buttons {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="admin-container">
+    <div class="container">
         <header>
             <div class="header-content">
                 <div class="logo">
@@ -454,7 +410,7 @@
                 </div>
                 <div class="admin-info">
                     <p>Admin: <strong id="admin-name">Loading...</strong></p>
-                    <p id="last-login">Last login: Loading...</p>
+                    <p id="admin-email">Loading...</p>
                 </div>
             </div>
         </header>
@@ -462,77 +418,63 @@
         <div id="alert-box"></div>
         
         <div class="stats-cards">
-            <div class="stat-card pending">
-                <div class="stat-number" id="pending-count">0</div>
-                <div class="stat-title">Pending Withdrawals</div>
+            <div class="stat-card">
+                <div>Pending Withdrawals</div>
+                <div class="stat-value stat-pending" id="pending-count">0</div>
+                <div>CBE Requests</div>
             </div>
-            <div class="stat-card approved">
-                <div class="stat-number" id="approved-count">0</div>
-                <div class="stat-title">Approved Withdrawals</div>
+            <div class="stat-card">
+                <div>Approved Today</div>
+                <div class="stat-value stat-approved" id="approved-count">0</div>
+                <div>CBE Requests</div>
             </div>
-            <div class="stat-card rejected">
-                <div class="stat-number" id="rejected-count">0</div>
-                <div class="stat-title">Rejected Withdrawals</div>
+            <div class="stat-card">
+                <div>Rejected Today</div>
+                <div class="stat-value stat-rejected" id="rejected-count">0</div>
+                <div>CBE Requests</div>
             </div>
-            <div class="stat-card total">
-                <div class="stat-number" id="total-count">0</div>
-                <div class="stat-title">Total Withdrawals</div>
+            <div class="stat-card">
+                <div>Total Processed</div>
+                <div class="stat-value" id="total-count">0</div>
+                <div>CBE Requests</div>
             </div>
         </div>
         
-        <div class="withdrawal-controls">
-            <h2 class="section-title">CBE Withdrawal Requests</h2>
-            
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="status-filter">Status</label>
-                    <select id="status-filter">
-                        <option value="all">All Statuses</option>
-                        <option value="pending" selected>Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="date-filter">Date</label>
-                    <input type="date" id="date-filter">
-                </div>
-                <div class="filter-group search-box">
-                    <label for="search">Search</label>
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="search" placeholder="Search by name, account...">
-                </div>
+        <div class="filters">
+            <div class="filter-group">
+                <label for="search-input">Search</label>
+                <input type="text" id="search-input" placeholder="Search by email, name or account">
             </div>
-            
+            <div class="filter-group">
+                <label for="status-filter">Status</label>
+                <select id="status-filter">
+                    <option value="all">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="date-filter">Date</label>
+                <input type="date" id="date-filter">
+            </div>
+        </div>
+        
+        <div class="withdrawal-list">
+            <div class="withdrawal-header">
+                <div>Date</div>
+                <div>User</div>
+                <div>Amount (ETB)</div>
+                <div>Fee (Points)</div>
+                <div>Status</div>
+                <div>Actions</div>
+            </div>
             <div id="withdrawals-container">
-                <div class="loading">Loading withdrawals...</div>
-            </div>
-            
-            <div class="pagination" id="pagination" style="display: none;">
-                <button class="pagination-btn active">1</button>
-                <button class="pagination-btn">2</button>
-                <button class="pagination-btn">3</button>
-                <button class="pagination-btn">Next</button>
+                <div class="loading">Loading withdrawal requests...</div>
             </div>
         </div>
-    </div>
-    
-    <!-- Withdrawal Detail Modal -->
-    <div class="modal" id="withdrawal-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Withdrawal Request Details</h2>
-                <button class="close-modal" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="withdrawal-details" id="modal-details">
-                    <!-- Details will be populated by JavaScript -->
-                </div>
-            </div>
-            <div class="modal-footer" id="modal-footer">
-                <!-- Action buttons will be populated by JavaScript -->
-            </div>
-        </div>
+        
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <!-- Firebase SDK -->
@@ -560,120 +502,147 @@
         const rdb = firebase.database();
 
         // Global variables
-        let currentWithdrawals = [];
-        let selectedWithdrawal = null;
         const EXCHANGE_RATE = 150; // 1 USDT = 150 ETB
+        let allWithdrawals = [];
+        let filteredWithdrawals = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         // Check authentication state
         auth.onAuthStateChanged((user) => {
             if (!user) {
+                // Redirect to login if not authenticated
                 window.location.href = 'index.html';
             } else {
                 // Load admin info
-                loadAdminInfo(user);
+                document.getElementById('admin-name').textContent = user.email;
+                document.getElementById('admin-email').textContent = user.email;
                 
-                // Load withdrawals
-                loadWithdrawals();
+                // Check if user is admin
+                checkAdminStatus(user.uid);
                 
-                // Set up real-time listener
-                setupWithdrawalsListener();
+                // Load withdrawal requests
+                loadWithdrawalRequests();
+                
+                // Set up real-time listener for new requests
+                setupRealtimeListener();
             }
         });
 
-        // Load admin info
-        function loadAdminInfo(user) {
-            document.getElementById('admin-name').textContent = user.email;
-            document.getElementById('last-login').textContent = `Last login: ${new Date().toLocaleString()}`;
+        // Check if user has admin privileges
+        function checkAdminStatus(userId) {
+            // In a real application, you would check against a list of admin UIDs
+            // For this example, we'll just allow any authenticated user
+            console.log("Admin access granted to:", userId);
         }
 
-        // Load withdrawals from Firebase
-        function loadWithdrawals() {
+        // Load all withdrawal requests
+        function loadWithdrawalRequests() {
             rdb.ref('withdrawals').orderByChild('timestamp').once('value')
                 .then(snapshot => {
-                    currentWithdrawals = [];
+                    allWithdrawals = [];
+                    
                     if (snapshot.exists()) {
                         snapshot.forEach(child => {
                             const withdrawal = child.val();
+                            // Only show CBE withdrawals
                             if (withdrawal.method === 'cbe') {
-                                currentWithdrawals.push({
+                                allWithdrawals.push({
                                     key: child.key,
                                     ...withdrawal
                                 });
                             }
                         });
                     }
-                    renderWithdrawals();
+                    
+                    // Sort by timestamp (newest first)
+                    allWithdrawals.sort((a, b) => b.timestamp - a.timestamp);
+                    
                     updateStats();
+                    filterWithdrawals();
                 })
-                .catch(error => {
-                    console.error("Error loading withdrawals:", error);
-                    showAlert('Error loading withdrawals. Please refresh the page.', 'error');
+                .catch((error) => {
+                    console.error("Error loading withdrawal requests:", error);
+                    showAlert('Error loading withdrawal requests', 'error');
                 });
         }
 
-        // Set up real-time listener for withdrawals
-        function setupWithdrawalsListener() {
+        // Set up real-time listener for new withdrawal requests
+        function setupRealtimeListener() {
             rdb.ref('withdrawals').orderByChild('timestamp').on('value', (snapshot) => {
-                currentWithdrawals = [];
-                if (snapshot.exists()) {
-                    snapshot.forEach(child => {
-                        const withdrawal = child.val();
-                        if (withdrawal.method === 'cbe') {
-                            currentWithdrawals.push({
-                                key: child.key,
-                                ...withdrawal
-                            });
-                        }
-                    });
-                }
-                renderWithdrawals();
-                updateStats();
+                loadWithdrawalRequests();
             });
         }
 
-        // Render withdrawals to the table
-        function renderWithdrawals() {
-            const container = document.getElementById('withdrawals-container');
-            const statusFilter = document.getElementById('status-filter').value;
+        // Update statistics
+        function updateStats() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             
-            // Filter withdrawals by status
-            let filteredWithdrawals = currentWithdrawals;
-            if (statusFilter !== 'all') {
-                filteredWithdrawals = currentWithdrawals.filter(w => w.status === statusFilter);
-            }
+            const pending = allWithdrawals.filter(w => w.status === 'pending').length;
+            const approvedToday = allWithdrawals.filter(w => 
+                w.status === 'approved' && new Date(w.timestamp) >= today
+            ).length;
+            const rejectedToday = allWithdrawals.filter(w => 
+                w.status === 'rejected' && new Date(w.timestamp) >= today
+            ).length;
+            
+            document.getElementById('pending-count').textContent = pending;
+            document.getElementById('approved-count').textContent = approvedToday;
+            document.getElementById('rejected-count').textContent = rejectedToday;
+            document.getElementById('total-count').textContent = allWithdrawals.length;
+        }
+
+        // Filter withdrawals based on search and filters
+        function filterWithdrawals() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const dateFilter = document.getElementById('date-filter').value;
+            
+            filteredWithdrawals = allWithdrawals.filter(withdrawal => {
+                // Search filter
+                const matchesSearch = 
+                    !searchTerm || 
+                    (withdrawal.userEmail && withdrawal.userEmail.toLowerCase().includes(searchTerm)) ||
+                    (withdrawal.fullName && withdrawal.fullName.toLowerCase().includes(searchTerm)) ||
+                    (withdrawal.accountNumber && withdrawal.accountNumber.includes(searchTerm));
+                
+                // Status filter
+                const matchesStatus = statusFilter === 'all' || withdrawal.status === statusFilter;
+                
+                // Date filter
+                let matchesDate = true;
+                if (dateFilter) {
+                    const withdrawalDate = new Date(withdrawal.timestamp).toISOString().split('T')[0];
+                    matchesDate = withdrawalDate === dateFilter;
+                }
+                
+                return matchesSearch && matchesStatus && matchesDate;
+            });
+            
+            displayWithdrawals(currentPage);
+            setupPagination();
+        }
+
+        // Display withdrawals with pagination
+        function displayWithdrawals(page) {
+            currentPage = page;
+            const container = document.getElementById('withdrawals-container');
+            container.innerHTML = '';
             
             if (filteredWithdrawals.length === 0) {
-                container.innerHTML = '<div class="loading">No withdrawals found</div>';
-                document.getElementById('pagination').style.display = 'none';
+                container.innerHTML = '<div class="loading">No withdrawal requests found</div>';
                 return;
             }
             
-            // Sort by timestamp (newest first)
-            filteredWithdrawals.sort((a, b) => b.timestamp - a.timestamp);
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const withdrawalsToShow = filteredWithdrawals.slice(startIndex, endIndex);
             
-            let tableHTML = `
-                <table class="withdrawals-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Account Number</th>
-                            <th>Amount</th>
-                            <th>Request Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
-            filteredWithdrawals.forEach(withdrawal => {
+            withdrawalsToShow.forEach(withdrawal => {
                 const date = new Date(withdrawal.timestamp);
-                const formattedDate = date.toLocaleDateString();
+                const formattedDate = date.toLocaleString();
                 
-                // Get first letter of user's name for avatar
-                const firstLetter = withdrawal.fullName ? withdrawal.fullName.charAt(0).toUpperCase() : 'U';
-                
-                // Determine status badge
                 let statusBadge = '';
                 if (withdrawal.status === 'pending') {
                     statusBadge = '<span class="status-badge status-pending">Pending</span>';
@@ -683,240 +652,251 @@
                     statusBadge = '<span class="status-badge status-rejected">Rejected</span>';
                 }
                 
-                // Action buttons based on status
-                let actionButtons = '';
-                if (withdrawal.status === 'pending') {
-                    actionButtons = `
-                        <button class="btn btn-sm btn-approve" onclick="approveWithdrawal('${withdrawal.key}')">Approve</button>
-                        <button class="btn btn-sm btn-reject" onclick="rejectWithdrawal('${withdrawal.key}')">Reject</button>
-                        <button class="btn btn-sm btn-view" onclick="viewWithdrawal('${withdrawal.key}')">View</button>
-                    `;
-                } else {
-                    actionButtons = `
-                        <button class="btn btn-sm btn-view" onclick="viewWithdrawal('${withdrawal.key}')">View</button>
-                    `;
-                }
+                const withdrawalItem = document.createElement('div');
+                withdrawalItem.className = 'withdrawal-item';
+                withdrawalItem.innerHTML = `
+                    <div>${formattedDate}</div>
+                    <div class="user-info">
+                        <div class="user-email">${withdrawal.userEmail || 'N/A'}</div>
+                        <div class="user-id">${withdrawal.fullName || 'N/A'}</div>
+                        <div class="user-id">Acc: ${withdrawal.accountNumber || 'N/A'}</div>
+                    </div>
+                    <div class="amount">${parseInt(withdrawal.amount).toLocaleString()} ETB</div>
+                    <div>${withdrawal.feePoints || Math.ceil((withdrawal.amount / EXCHANGE_RATE) * 0.10)} Points</div>
+                    <div>${statusBadge}</div>
+                    <div class="action-buttons">
+                        ${withdrawal.status === 'pending' ? `
+                        <button class="btn btn-success" onclick="approveWithdrawal('${withdrawal.key}', '${withdrawal.userId}', ${withdrawal.amount})">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                        <button class="btn btn-danger" onclick="showRejectModal('${withdrawal.key}')">
+                            <i class="fas fa-times"></i> Reject
+                        </button>` : ''}
+                        ${withdrawal.status !== 'pending' ? `
+                        <button class="btn" onclick="viewDetails('${withdrawal.key}')">
+                            <i class="fas fa-eye"></i> Details
+                        </button>` : ''}
+                    </div>
+                `;
                 
-                tableHTML += `
-                    <tr>
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">${firstLetter}</div>
-                                <div>
-                                    <div>${withdrawal.fullName || 'Unknown User'}</div>
-                                    <div class="text-muted">${withdrawal.userEmail || 'No email'}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>${withdrawal.accountNumber || 'N/A'}</td>
-                        <td>${withdrawal.amount ? parseFloat(withdrawal.amount).toLocaleString() : '0'} ETB</td>
-                        <td>${formattedDate}</td>
-                        <td>${statusBadge}</td>
-                        <td>
-                            <div class="action-buttons">
-                                ${actionButtons}
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                container.appendChild(withdrawalItem);
             });
-            
-            tableHTML += `
-                    </tbody>
-                </table>
-            `;
-            
-            container.innerHTML = tableHTML;
-            document.getElementById('pagination').style.display = 'flex';
         }
 
-        // Update statistics
-        function updateStats() {
-            const pendingCount = currentWithdrawals.filter(w => w.status === 'pending').length;
-            const approvedCount = currentWithdrawals.filter(w => w.status === 'approved').length;
-            const rejectedCount = currentWithdrawals.filter(w => w.status === 'rejected').length;
-            const totalCount = currentWithdrawals.length;
+        // Setup pagination
+        function setupPagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
             
-            document.getElementById('pending-count').textContent = pendingCount;
-            document.getElementById('approved-count').textContent = approvedCount;
-            document.getElementById('rejected-count').textContent = rejectedCount;
-            document.getElementById('total-count').textContent = totalCount;
-        }
-
-        // View withdrawal details
-        function viewWithdrawal(key) {
-            const withdrawal = currentWithdrawals.find(w => w.key === key);
-            if (!withdrawal) return;
+            const totalPages = Math.ceil(filteredWithdrawals.length / itemsPerPage);
             
-            selectedWithdrawal = withdrawal;
+            if (totalPages <= 1) return;
             
-            const date = new Date(withdrawal.timestamp);
-            const formattedDate = date.toLocaleString();
-            const amountInUsdt = withdrawal.amountInUsdt || (withdrawal.amount / EXCHANGE_RATE);
-            
-            let statusBadge = '';
-            if (withdrawal.status === 'pending') {
-                statusBadge = '<span class="status-badge status-pending">Pending</span>';
-            } else if (withdrawal.status === 'approved') {
-                statusBadge = '<span class="status-badge status-approved">Approved</span>';
-            } else if (withdrawal.status === 'rejected') {
-                statusBadge = '<span class="status-badge status-rejected">Rejected</span>';
+            // Previous button
+            if (currentPage > 1) {
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'page-btn';
+                prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevBtn.onclick = () => displayWithdrawals(currentPage - 1);
+                pagination.appendChild(prevBtn);
             }
             
-            let actionButtons = '';
-            if (withdrawal.status === 'pending') {
-                actionButtons = `
-                    <button class="btn btn-approve" onclick="approveWithdrawal('${withdrawal.key}')">Approve</button>
-                    <button class="btn btn-reject" onclick="rejectWithdrawal('${withdrawal.key}')">Reject</button>
-                    <button class="btn" onclick="closeModal()">Close</button>
-                `;
-            } else {
-                actionButtons = `
-                    <button class="btn" onclick="closeModal()">Close</button>
-                `;
+            // Page buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => displayWithdrawals(i);
+                pagination.appendChild(pageBtn);
             }
             
-            const detailsHTML = `
-                <div class="detail-row">
-                    <div class="detail-label">User:</div>
-                    <div class="detail-value">${withdrawal.fullName || 'Unknown'} (${withdrawal.userEmail || 'No email'})</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Account Number:</div>
-                    <div class="detail-value">${withdrawal.accountNumber || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Account Name:</div>
-                    <div class="detail-value">${withdrawal.fullName || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Phone Number:</div>
-                    <div class="detail-value">${withdrawal.phone || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Amount:</div>
-                    <div class="detail-value">${withdrawal.amount ? parseFloat(withdrawal.amount).toLocaleString() : '0'} ETB</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Equivalent USDT:</div>
-                    <div class="detail-value">${amountInUsdt.toFixed(2)} USDT</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Fee (Points):</div>
-                    <div class="detail-value">${withdrawal.feePoints || Math.ceil(amountInUsdt * 0.10)} Points</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Request Date:</div>
-                    <div class="detail-value">${formattedDate}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Status:</div>
-                    <div class="detail-value">${statusBadge}</div>
-                </div>
-            `;
-            
-            document.getElementById('modal-details').innerHTML = detailsHTML;
-            document.getElementById('modal-footer').innerHTML = actionButtons;
-            document.getElementById('withdrawal-modal').classList.add('show');
+            // Next button
+            if (currentPage < totalPages) {
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'page-btn';
+                nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextBtn.onclick = () => displayWithdrawals(currentPage + 1);
+                pagination.appendChild(nextBtn);
+            }
         }
 
-        // Close modal
-        function closeModal() {
-            document.getElementById('withdrawal-modal').classList.remove('show');
-            selectedWithdrawal = null;
-        }
-
-        // Approve withdrawal
-        async function approveWithdrawal(key) {
-            const withdrawal = currentWithdrawals.find(w => w.key === key);
-            if (!withdrawal) return;
-            
-            if (!confirm(`Are you sure you want to approve this withdrawal of ${withdrawal.amount} ETB?`)) {
+        // Approve withdrawal request
+        async function approveWithdrawal(withdrawalId, userId, amountETB) {
+            if (!confirm(`Approve withdrawal of ${amountETB} ETB for user ${userId}?`)) {
                 return;
             }
             
             try {
-                // Calculate amounts
-                const amountInUsdt = withdrawal.amountInUsdt || (withdrawal.amount / EXCHANGE_RATE);
-                const feePoints = withdrawal.feePoints || Math.ceil(amountInUsdt * 0.10);
+                // Points were already deducted when the request was made (during pending status)
+                // So we only need to update the withdrawal status
                 
-                // Get user data first to check balances
-                const userRef = db.collection('users').doc(withdrawal.userId);
-                const userDoc = await userRef.get();
-                
-                if (!userDoc.exists) {
-                    showAlert('User account not found!', 'error');
-                    return;
-                }
-                
-                const userData = userDoc.data();
-                const currentEarnings = userData.taskEarnings || 0;
-                const currentPoints = userData.points || 0;
-                
-                // Check if user has sufficient balance
-                if (currentEarnings < amountInUsdt) {
-                    showAlert(`User has insufficient earnings balance. Required: ${amountInUsdt.toFixed(2)} USDT, Available: ${currentEarnings.toFixed(2)} USDT`, 'error');
-                    return;
-                }
-                
-                if (currentPoints < feePoints) {
-                    showAlert(`User has insufficient points for fee. Required: ${feePoints} Points, Available: ${currentPoints} Points`, 'error');
-                    return;
-                }
-                
-                // Update user's balance in Firestore
-                const newEarnings = currentEarnings - amountInUsdt;
-                const newPoints = currentPoints - feePoints;
-                
-                await userRef.update({
-                    taskEarnings: newEarnings >= 0 ? newEarnings : 0,
-                    points: newPoints >= 0 ? newPoints : 0
-                });
-                
-                // Update withdrawal status
-                await rdb.ref('withdrawals').child(key).update({
+                // Update withdrawal status in Realtime DB
+                await rdb.ref(`withdrawals/${withdrawalId}`).update({
                     status: 'approved',
                     processedAt: Date.now(),
-                    processedBy: auth.currentUser.email,
-                    amountInUsdt: amountInUsdt,
-                    feePoints: feePoints
+                    processedBy: auth.currentUser.uid
                 });
                 
-                showAlert('Withdrawal approved successfully! User balance has been updated.', 'success');
-                closeModal();
+                showAlert(`Withdrawal approved successfully!`, 'success');
+                loadWithdrawalRequests();
+                
             } catch (error) {
                 console.error('Error approving withdrawal:', error);
                 showAlert('Error approving withdrawal. Please try again.', 'error');
             }
         }
 
-        // Reject withdrawal
-        async function rejectWithdrawal(key) {
-            const withdrawal = currentWithdrawals.find(w => w.key === key);
-            if (!withdrawal) return;
+        // Show rejection modal
+        function showRejectModal(withdrawalId) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                    <h3 class="modal-title">Reject Withdrawal Request</h3>
+                    <div class="info-note">
+                        <i class="fas fa-info-circle"></i> When rejecting a withdrawal, the user's earnings balance will be refunded, but points already deducted for the fee will not be refunded.
+                    </div>
+                    <p>Please provide a reason for rejection:</p>
+                    <textarea class="rejection-reason" id="rejection-reason" placeholder="Enter reason for rejection..."></textarea>
+                    <div class="action-buttons" style="margin-top: 20px; justify-content: center;">
+                        <button class="btn btn-danger" onclick="rejectWithdrawal('${withdrawalId}')">
+                            <i class="fas fa-times"></i> Confirm Rejection
+                        </button>
+                    </div>
+                </div>
+            `;
             
-            const reason = prompt('Please enter the reason for rejection:');
-            if (reason === null) return;
+            document.body.appendChild(modal);
             
-            if (reason.trim() === '') {
-                alert('Rejection reason cannot be empty!');
+            // Close modal when clicking outside
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            };
+        }
+
+        // Reject withdrawal request
+        async function rejectWithdrawal(withdrawalId) {
+            const reason = document.getElementById('rejection-reason').value.trim();
+            
+            if (!reason) {
+                alert('Please provide a reason for rejection');
                 return;
             }
             
             try {
-                // Update withdrawal status
-                await rdb.ref('withdrawals').child(key).update({
+                // Get withdrawal data first to refund the user
+                const withdrawalSnapshot = await rdb.ref(`withdrawals/${withdrawalId}`).once('value');
+                const withdrawal = withdrawalSnapshot.val();
+                
+                if (withdrawal) {
+                    const amountInUsdt = withdrawal.amount / EXCHANGE_RATE;
+                    
+                    // Refund the user's earnings balance (points are not refunded as they were already deducted)
+                    const userDoc = await db.collection('users').doc(withdrawal.userId).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        const currentEarnings = userData.taskEarnings || 0;
+                        
+                        await db.collection('users').doc(withdrawal.userId).update({
+                            taskEarnings: currentEarnings + amountInUsdt
+                        });
+                    }
+                }
+                
+                // Update withdrawal status in Realtime DB
+                await rdb.ref(`withdrawals/${withdrawalId}`).update({
                     status: 'rejected',
+                    rejectionReason: reason,
                     processedAt: Date.now(),
-                    processedBy: auth.currentUser.email,
-                    rejectionReason: reason
+                    processedBy: auth.currentUser.uid
                 });
                 
-                showAlert('Withdrawal rejected successfully!', 'success');
                 closeModal();
+                showAlert('Withdrawal rejected successfully. User earnings balance has been refunded.', 'success');
+                loadWithdrawalRequests();
+                
             } catch (error) {
                 console.error('Error rejecting withdrawal:', error);
                 showAlert('Error rejecting withdrawal. Please try again.', 'error');
+            }
+        }
+
+        // View withdrawal details
+        function viewDetails(withdrawalId) {
+            const withdrawal = allWithdrawals.find(w => w.key === withdrawalId);
+            
+            if (!withdrawal) return;
+            
+            const date = new Date(withdrawal.timestamp);
+            const processedDate = withdrawal.processedAt ? new Date(withdrawal.processedAt) : null;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                    <h3 class="modal-title">Withdrawal Details</h3>
+                    <div class="modal-details">
+                        <div class="detail-row">
+                            <span class="detail-label">User:</span>
+                            <span>${withdrawal.userEmail} (${withdrawal.fullName})</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Account Number:</span>
+                            <span>${withdrawal.accountNumber || 'N/A'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Phone:</span>
+                            <span>${withdrawal.phone || 'N/A'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Amount:</span>
+                            <span>${parseInt(withdrawal.amount).toLocaleString()} ETB (${(withdrawal.amount / EXCHANGE_RATE).toFixed(2)} USDT)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Fee:</span>
+                            <span>${withdrawal.feePoints || Math.ceil((withdrawal.amount / EXCHANGE_RATE) * 0.10)} Points</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="status-badge ${withdrawal.status === 'pending' ? 'status-pending' : withdrawal.status === 'approved' ? 'status-approved' : 'status-rejected'}">${withdrawal.status}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Request Date:</span>
+                            <span>${date.toLocaleString()}</span>
+                        </div>
+                        ${processedDate ? `
+                        <div class="detail-row">
+                            <span class="detail-label">Processed Date:</span>
+                            <span>${processedDate.toLocaleString()}</span>
+                        </div>` : ''}
+                        ${withdrawal.rejectionReason ? `
+                        <div class="detail-row">
+                            <span class="detail-label">Rejection Reason:</span>
+                            <span>${withdrawal.rejectionReason}</span>
+                        </div>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal when clicking outside
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            };
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.querySelector('.modal');
+            if (modal) {
+                document.body.removeChild(modal);
             }
         }
 
@@ -937,24 +917,9 @@
         }
 
         // Event listeners for filters
-        document.getElementById('status-filter').addEventListener('change', renderWithdrawals);
-        document.getElementById('date-filter').addEventListener('change', function() {
-            // In a real app, you would filter the table based on date
-            console.log('Filtering by date:', this.value);
-        });
-        
-        document.getElementById('search').addEventListener('input', function() {
-            // In a real app, you would search the table based on input
-            console.log('Searching for:', this.value);
-        });
-        
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('withdrawal-modal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
+        document.getElementById('search-input').addEventListener('input', filterWithdrawals);
+        document.getElementById('status-filter').addEventListener('change', filterWithdrawals);
+        document.getElementById('date-filter').addEventListener('change', filterWithdrawals);
     </script>
 </body>
 </html>
